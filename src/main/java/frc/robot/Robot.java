@@ -26,7 +26,7 @@ public class Robot extends TimedRobot {
 
   private final XRPDrivetrain m_drivetrain = new XRPDrivetrain();
   private final XRPGyro m_gyro = new XRPGyro();
-  private final XRPServo m_arm = new XRPServo(6);
+  private final XRPServo m_arm = new XRPServo(4);
   private final Timer m_timer = new Timer();
 
   /**
@@ -83,17 +83,17 @@ public class Robot extends TimedRobot {
       case kDefaultAuto:
       default:
 
-        // Drive forward 6 inches
-        if(m_autoStage == 0 && m_drivetrain.getLeftDistanceInch() < 30) {
+        // Drive forward 30 inches
+        if(m_autoStage == 0 && Math.abs(m_drivetrain.getLeftDistanceInch()) <= 30) {
             m_drivetrain.setMotors(1.0, 1.0);
 
-        // Poiunt turn to the right
-        } else if(m_autoStage == 1 && m_timer.hasElapsed(3.0)) {
-          m_arm.setAngle(m_timer.get() / 3 * 180);
+        // "Score" note
+        } else if(m_autoStage == 1 && !m_timer.hasElapsed(0.5)) {
+          m_arm.setAngle(m_timer.get() / 0.5 * 180);
           m_drivetrain.stop();
 
-        // Drive forward 6 inches
-        } else if(m_autoStage == 2 && m_drivetrain.getLeftDistanceInch() < 30) {
+        // Drive back 30 inches
+        } else if(m_autoStage == 2 && Math.abs(m_drivetrain.getLeftDistanceInch()) <= 30) {
             m_drivetrain.setMotors(-1.0, -1.0);
 
         // Do nothing when complete
@@ -105,6 +105,7 @@ public class Robot extends TimedRobot {
           m_autoStage += 1;
           m_drivetrain.resetEncoders();
           m_drivetrain.stop();
+          m_arm.setAngle(90);
           m_timer.reset();
           m_timer.start();
         }
