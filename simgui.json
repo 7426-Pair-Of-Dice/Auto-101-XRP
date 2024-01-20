@@ -1,0 +1,11 @@
+{
+  "HALProvider": {
+    "Other Devices": {
+      "XRPGyro": {
+        "header": {
+          "open": true
+        }
+      }
+    }
+  }
+}
